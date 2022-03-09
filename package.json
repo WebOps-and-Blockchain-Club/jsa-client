@@ -8,7 +8,7 @@
     "start": "next start -p $PORT"
   },
   "engines": {
-    "node": "14.17.1"
+    "node": ">=14.17.1"
   },
   "dependencies": {
     "@emotion/cache": "^11.7.1",
