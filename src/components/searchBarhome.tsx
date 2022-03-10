@@ -1,22 +1,23 @@
 import Link from "next/link";
 import { useState } from "react";
-//imports from material ui
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 
-const SearchBar = () => {
+export default function SearchBarhome() {
   const [job_name, set_job_name] = useState<string>("-1");
   const [job_location, set_job_location] = useState<string>("-1");
   function submitEvent() {
     console.log("call started");
-    if (job_location === "-1" || job_name == "-1") window.alert("Put tags");
+    if (job_location === "-1" || job_name == "-1")
+     window.alert("Put tags");
     else {
       //TODO API CALL ref eof
     }
   }
+
   return (
-    <>
+    <div>
       <form
         method="POST"
         action={`/jobs?jobName=${job_name}&jobLocation=${job_location}`}
@@ -27,39 +28,51 @@ const SearchBar = () => {
           justifyContent="center"
           alignItems="center"
           className="flex2"
-          m={1}
         >
-          <TextField
-            onChange={(e: React.ChangeEvent<any>) => {
-              set_job_name(e.target.value);
-            }}
-            value={job_name === "-1" ? "" : job_name}
-            label={"Job Title"}
+          <Box
             sx={{
               width: { xs: "80vw", sm: "250px", md: "250px" },
               height: { xs: "44px", sm: "50px" },
               m: "10px",
             }}
-          ></TextField>
-
-          <TextField
-            onChange={(e: React.ChangeEvent<any>) => {
-              set_job_location(e.target.value);
-            }}
-            value={job_location === "-1" ? "" : job_location}
-            label={"Job Location"}
+          >
+            <input
+              onChange={(e: React.ChangeEvent<any>) => {
+                set_job_name(e.target.value);
+              }}
+              value={job_name === "-1" ? "" : job_name}
+              placeholder=" Job name"
+              style={{
+                width: "100%",
+                height: "100%",
+                padding: "10px",
+                border: "none",
+                borderRadius: "5px",
+              }}
+            ></input>
+          </Box>
+          <Box
             sx={{
               width: { xs: "80vw", sm: "250px", md: "250px" },
               height: { xs: "44px", sm: "50px" },
               m: "10px",
             }}
-            className="searchbox"
-          ></TextField>
-          {/* 
-          <Link
-            href={`/jobs?jobName=${job_name}&jobLocation=${job_location}`}
-            passHref
-          > */}
+          >
+            <input
+              onChange={(e: React.ChangeEvent<any>) => {
+                set_job_location(e.target.value);
+              }}
+              value={job_location === "-1" ? "" : job_location}
+              placeholder=" Job Location"
+              style={{
+                width: "100%",
+                height: "100%",
+                padding: "10px",
+                borderRadius: "5px",
+                border: "none",
+              }}
+            ></input>
+          </Box>
           <Button
             onClick={submitEvent}
             variant="contained"
@@ -77,7 +90,6 @@ const SearchBar = () => {
           </Button>
         </Box>
       </form>
-    </>
+    </div>
   );
-};
-export default SearchBar;
+}

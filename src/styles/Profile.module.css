@@ -1,0 +1,62 @@
+.greyback {
+  background-color: "#C4C4C4";
+}
+.resume * {
+  display: flex;
+}
+
+.resumefile {
+  margin-left: 80px;
+  background: white;
+  border-radius: 50px;
+  box-shadow: 2px 2px 5px black;
+
+  width: "50px";
+}
+.resume ::-webkit-file-upload-button {
+  height: 40px;
+  color: #2e80fd;
+  background: white;
+  border-color: #2e80fd;
+  border-radius: 50px;
+  outline: none;
+  border-style: solid;
+}
+.resume ::-webkit-file-upload-button:hover {
+  color: white;
+  cursor: pointer;
+  background-color: #2e80fd;
+}
+
+.experienceContainer {
+  display: flex;
+  align-items: center;
+}
+
+.experienceContainer Image {
+  margin-left: 20px;
+  cursor: pointer;
+}
+.editor {
+  display: flex;
+  align-content: center;
+}
+.editor input {
+  width: 70vw;
+}
+.editor Image {
+  margin-left: 20px;
+}
+@media (max-width: 600px) {
+  /*resume*/
+  .resume {
+    display: flex;
+  }
+  .resume * {
+    display: inline-block;
+  }
+
+  .resumefile {
+    margin-left: 20px;
+  }
+}
