@@ -27,7 +27,7 @@ const Profile = () => {
     const formData = new FormData();
     formData.append("file", file); // appending file
     axios
-      .post("http://localhost:3000/upload", formData, {
+      .post(`${process.env.BACKEND_URL}/upload`, formData, {
         onUploadProgress: (ProgressEvent) => {
           let progress =
             Math.round((ProgressEvent.loaded / ProgressEvent.total) * 100) +

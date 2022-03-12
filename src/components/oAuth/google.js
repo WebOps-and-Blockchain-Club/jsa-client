@@ -1,5 +1,8 @@
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { initializeApp } from "firebase/app";
+import { useContext } from "react";
+import { AuthContext } from "../../context/authContext";
+var axios = require("axios");
 
 const firebaseConfig = {
   apiKey: process.env.KEY,
@@ -16,9 +19,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
 
-export default function googleAuth() {
+export default async function googleAuth() {
   signInWithPopup(auth, provider)
-    .then((result) => {
+    .then(async (result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
       const credential = GoogleAuthProvider.credentialFromResult(result);
       if (credential != null) {
@@ -27,29 +30,28 @@ export default function googleAuth() {
       // The signed-in user info.
       const user = result.user;
       //TODO change post route url
-      fetch(process.env.BACKEND_URL + "/signup", {
+      var data = JSON.stringify({
+        displayName: user.displayName,
+        email: user.email,
+      });
+
+      var config = {
         method: "POST",
         mode: "cors",
+        credentials: "include",
+        url: `${process.env.BACKEND_URL}/signup`,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          displayName: user.displayName,
-          email: user.email,
-        }),
-      })
-        .then(async (res) => {
-          console.log("done");
-          console.log(user.email);
-          try {
-            var resjson = await res.json();
-            console.log(resjson);
-          } catch (e) {
-            console.log(e);
-          }
+        data: data,
+      };
+      await axios(config)
+        .then(async function (response) {
+          window.location.reload();
+          console.log(response);
         })
-        .catch((e) => {
-          console.log(e);
+        .catch(function (error) {
+          console.log(error);
         });
     })
     .catch((error) => {

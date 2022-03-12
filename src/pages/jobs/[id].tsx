@@ -31,6 +31,7 @@ export default function JobDescription() {
     job_location: string;
     job_salary: string;
     job_title: string;
+    similarity : number
   }
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -47,6 +48,7 @@ export default function JobDescription() {
     job_location: " ",
     job_salary: " ",
     job_title: " ",
+    similarity : 0
   });
   //function to fetch job details runs only once
 
@@ -56,7 +58,7 @@ export default function JobDescription() {
       setHasError(false);
       try {
         console.log("fetching the specific job");
-        const response = fetch(`${process.env.BACKEND_URL}/job/${id}`, {
+        const response = await fetch(`${process.env.BACKEND_URL}/job/${id}`, {
           method: "GET",
           mode: "cors",
           headers: {

@@ -37,12 +37,12 @@ return (
                 >
                   {jobData.job_title}
                 </Typography>
-                <a href={jobData.job_link}>
+                <a href={jobData.job_link} target="__blank">
                   <Button
                     variant="contained"
                     style={{ fontFamily: "Calibri", fontWeight: "700" }}
                   >
-                    {jobData.job_desk}
+                    Apply
                   </Button>
                 </a>
               </Stack>

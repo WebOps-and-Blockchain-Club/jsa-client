@@ -45,86 +45,95 @@ const JobListing = ({ results }) => {
       >
         <Box
           className="container"
-          sx={{ display: "flex", flexDirection: "column"}}
+          sx={{ display: "flex", flexDirection: "column" }}
         >
           {/*container for left side cards*/}
           {results.length === 0 ? (
             <p>no jobs found</p>
           ) : (
             results.map((job: any, index: any) => {
-              return (
-                <Card sx={{ m: 0.5,  maxWidth: "520px" }} key={index}>
-                  <Box
-                    onClick={() => getJobDescription(job)}
-                    sx={{ cursor: "pointer" }}
-                  >
-                    <CardContent
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
+              if (job) {
+                return (
+                  <Card sx={{ m: 0.5, maxWidth: "520px" }} key={index}>
+                    <Box
+                      onClick={() => getJobDescription(job)}
+                      sx={{ cursor: "pointer" }}
                     >
-                      <Stack
-                        direction="row"
-                        spacing={2}
-                        justifyContent="space-between"
+                      <CardContent
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
                       >
-                        <Typography
-                          color="#3BA0FD"
-                          variant="h5"
-                          style={{ fontFamily: "Noto Sans", fontSize: "16px" }}
+                        <Stack
+                          direction="row"
+                          spacing={2}
+                          justifyContent="space-between"
                         >
-                          {job.job_title}
-                        </Typography>
-                        <a href={job.job_link}>
-                          <Button
-                            variant="contained"
-                            style={{ fontFamily: "Calibri", fontWeight: "700" }}
-                            size="small"
+                          <Typography
+                            color="#3BA0FD"
+                            variant="h5"
+                            style={{
+                              fontFamily: "Noto Sans",
+                              fontSize: "16px",
+                            }}
                           >
-                            {job.job_desk}
-                          </Button>
-                        </a>
-                      </Stack>
-                      <Typography
-                        color="black"
-                        style={{ fontFamily: "Montserrat", fontWeight: "700" }}
-                      >
-                        {job.job_employer}
-                      </Typography>
-                      <Typography
-                        style={{
-                          fontFamily: "Calibri",
-                          fontWeight: "550",
-                          fontSize: "16px",
-                        }}
-                      >
-                        {job.job_location}
-                      </Typography>
-                      <Typography
-                        style={{
-                          fontFamily: "Calibri",
-                          fontWeight: "550",
-                          fontSize: "16px",
-                        }}
-                      >
-                        {job.job_salary}
-                      </Typography>
-                    </CardContent>
-                  </Box>
-                </Card>
-              );
+                            {job.job_title}
+                          </Typography>
+                          <a href={job.job_link} target="__blank">
+                            <Button
+                              variant="contained"
+                              style={{
+                                fontFamily: "Calibri",
+                                fontWeight: "700",
+                              }}
+                              size="small"
+                            >
+                              {job.job_desk}
+                            </Button>
+                          </a>
+                        </Stack>
+                        <Typography
+                          color="black"
+                          style={{
+                            fontFamily: "Montserrat",
+                            fontWeight: "700",
+                          }}
+                        >
+                          {job.job_employer}
+                        </Typography>
+                        <Typography
+                          style={{
+                            fontFamily: "Calibri",
+                            fontWeight: "550",
+                            fontSize: "16px",
+                          }}
+                        >
+                          {job.job_location}
+                        </Typography>
+                        <Typography
+                          style={{
+                            fontFamily: "Calibri",
+                            fontWeight: "550",
+                            fontSize: "16px",
+                          }}
+                        >
+                          {job.job_salary}
+                        </Typography>
+                      </CardContent>
+                    </Box>
+                  </Card>
+                );
+              }
             }) //closing the mapping loop
           )}
         </Box>
         {/* container for the description */}
-        {!isPhone && (
-            <JobDetails jobData={jobData} />
-        )}
+        {!isPhone && <JobDetails jobData={jobData} />}
       </Box>
     </>
   );
-}
+};
 //<JobDescription description={jobData} />
 
 export default JobListing;
