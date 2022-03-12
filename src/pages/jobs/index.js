@@ -12,21 +12,20 @@ import { Oval } from "react-loader-spinner";
 import { Box } from "@mui/system";
 
 export default function Job() {
-  const useUrl = useRouter();
-  const { jobName, jobLocation } = useUrl.query;
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
   const [hasError, setHasError] = useState(false);
   //job fetch function
   console.log(isLoading);
   //jobFetch was previously here
-  const job_title = "title";
   //fetch whenever query is changed
   useEffect(() => {
+    if (!router.isReady) return;
+    const { jobName, jobLocation } = router.query;
     const jobFetch = async () => {
       setIsLoading(true);
 
-      setHasError(false);
       try {
         console.log("fetching from backend");
         const response = await fetch(
@@ -44,12 +43,11 @@ export default function Job() {
         setData(jsonData);
         setIsLoading(false);
       } catch (error) {
-        setHasError(true);
         console.log(hasError);
       }
     };
     jobFetch();
-  }, [useUrl.query, hasError, jobLocation, jobName]);
+  }, [router.isReady]);
 
   return (
     <>

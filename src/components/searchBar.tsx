@@ -4,13 +4,17 @@ import { useState } from "react";
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
-
+import { useRouter } from "next/router";
 const SearchBar = () => {
+  const router = useRouter();
   const [job_name, set_job_name] = useState<string>("-1");
   const [job_location, set_job_location] = useState<string>("-1");
   function submitEvent() {
     console.log("call started");
-    if (job_location === "-1" || job_name == "-1") window.alert("Put tags");
+    if (job_location === "-1" || job_name == "-1") 
+    {window.alert("Enter job name and location");
+      router.push("/");
+  }
     else {
       //TODO API CALL ref eof
     }
