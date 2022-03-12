@@ -13,6 +13,7 @@ import {
   Stack,
   Button,
   useMediaQuery,
+  Chip,
 } from "@mui/material";
 
 const JobListing = ({ results }) => {
@@ -31,7 +32,7 @@ const JobListing = ({ results }) => {
     setJobData(job);
     console.log(job);
   };
-
+  const len = results.length;
   return (
     <>
       <Box
@@ -93,6 +94,26 @@ const JobListing = ({ results }) => {
                             </Button>
                           </a>
                         </Stack>
+                        {
+                          job.similarity ? <Typography
+                          color="#3BA0FD"
+                          variant="h5"
+                          style={{
+                            fontFamily: "Noto Sans",
+                            fontSize: "10px",
+                          }}
+                        >
+                          {index < len / 4 ? (
+                            <Chip label="Most Relevant" size="small" color="success" />
+                          ) : null}
+                          {index > len / 4 && index < (3 * len) / 4 ? (
+                            <Chip label="Relevant" size="small" color="primary" />
+                          ) : null}
+                          {index > (3 * len) / 4 ? (
+                            <Chip label="Less Relevant" size="small" />
+                          ) : null}
+                        </Typography> : null
+                        }
                         <Typography
                           color="black"
                           style={{
