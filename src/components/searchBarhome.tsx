@@ -3,16 +3,19 @@ import { useState } from "react";
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
+import { useRouter } from "next/router";
 
 export default function SearchBarhome() {
   const [job_name, set_job_name] = useState<string>("-1");
   const [job_location, set_job_location] = useState<string>("-1");
-  function submitEvent() {
+  const router = useRouter();
+  function submitEvent(e) {
+    e.preventDefault();
     console.log("call started");
-    if (job_location === "-1" || job_name == "-1")
-     window.alert("Put tags");
+    if (job_location === "-1" || job_name == "-1") window.alert("Put tags");
     else {
       //TODO API CALL ref eof
+      router.push(`/jobs?jobName=${job_name}&jobLocation=${job_location}`);
     }
   }
 

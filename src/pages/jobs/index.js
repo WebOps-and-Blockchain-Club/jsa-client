@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { Oval } from "react-loader-spinner";
 //imports from mui
 import { Box } from "@mui/system";
+import axios from "axios";
 
 export default function Job() {
   const useUrl = useRouter();
@@ -27,29 +28,48 @@ export default function Job() {
       setIsLoading(true);
 
       setHasError(false);
+      var config = {
+        method: "get",
+        url: `${process.env.BACKEND_URL}/jobs?location=${jobLocation}&title=${jobName}`,
+      };
       try {
         console.log("fetching from backend");
-        const response = await fetch(
-          `${process.env.BACKEND_URL}/jobs?location=${jobLocation}&title=${jobName}`,
-          {
-            method: "GET",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
+        axios(config).then(async (response) => {
+          console.log(response.data);
+          if (response.data) {
+            console.log(response.data);
+            setData(response.data);
+            setIsLoading(false);
           }
-        );
-        console.log(response);
-        const jsonData = await response.json();
-        setData(jsonData);
-        setIsLoading(false);
+        });
       } catch (error) {
         setHasError(true);
         console.log(hasError);
       }
+      // try {
+      //   console.log("fetching from backend");
+      //   const response = await fetch(
+      //     `${process.env.BACKEND_URL}/jobs?location=${jobLocation}&title=${jobName}`,
+      //     {
+      //       method: "GET",
+      //       // mode: "cors",
+      //       // headers: {
+      //       //   "Content-Type": "application/json",
+      //       // },
+      //     }
+      //   );
+      //   console.log(response);
+      //   const jsonData = await response.json();
+      //   setData(jsonData);
+      //   setIsLoading(false);
+      // } catch (error) {
+      //   setHasError(true);
+      //   console.log(hasError);
+      // }
     };
+
     jobFetch();
-  }, [useUrl.query, hasError, jobLocation, jobName]);
+  }, [hasError]);
 
   return (
     <>
