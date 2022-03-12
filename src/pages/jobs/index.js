@@ -15,7 +15,6 @@ export default function Job() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
-  const [hasError, setHasError] = useState(false);
   //job fetch function
   console.log(isLoading);
   //jobFetch was previously here

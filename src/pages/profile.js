@@ -1,14 +1,22 @@
 //importing modules
 import NavBar from "../components/navBar";
-import React, { useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import styles from "../styles/Profile.module.css";
 //imports from mui
-import { Radio, RadioGroup, FormControlLabel, Box, Input } from "@mui/material";
+import {
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  Box,
+  Input,
+  Stack,
+} from "@mui/material";
 import { FormLabel, TextField, FormControl } from "@mui/material";
 import { Typography, Button, InputLabel, OutlinedInput } from "@mui/material";
 import ModeEditRoundedIcon from "@mui/icons-material/ModeEditRounded";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 var axios = require("axios");
+var FormData = require("form-data");
 
 const Profile = () => {
   const [file, setFile] = useState(""); // storing the uploaded file
@@ -16,18 +24,73 @@ const Profile = () => {
   const [data, getFile] = useState({ name: "", path: "" });
   const [progress, setProgess] = useState(0); // progess bar
   const el = useRef(); // accesing input element
-
+  const [age, setAge] = useState();
+  const [gender, setGender] = useState();
+  const [email, setEmail] = useState();
+  const [name, setName] = useState();
+  const [experience, setExp] = useState();
+  const [pre, setPre] = useState();
+  useEffect(() => {
+    var config = {
+      method: "get",
+      url: `${process.env.BACKEND_URL}/profile`,
+      credentials: "include",
+    };
+    // const cookies = new Cookies();
+    axios(config)
+      .then(function (response) {
+        if (response.data.id) {
+          setEmail(response.data.email);
+          setName(response.data.username);
+          setPre(response.data);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
   const handleChange = (e) => {
     setProgess(0);
     const file = e.target.files[0]; // accessing file
     console.log(file);
     setFile(file); // storing file
   };
-  const uploadFile = () => {
+  const uploadFile = async (e) => {
+    e.preventDefault();
+
+    var data = JSON.stringify({
+      gender,
+      experience,
+      age,
+    });
+
+    var config = {
+      method: "post",
+      url: `${process.env.BACKEND_URL}/addprofile`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    await axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
     const formData = new FormData();
     formData.append("file", file); // appending file
-    axios
-      .post(`${process.env.BACKEND_URL}/upload`, formData, {
+    var config = {
+      method: "post",
+      url: `${process.env.BACKEND_URL}/upload`,
+      data: formData,
+      ...formData.getHeaders,
+    };
+    file &&
+      (await axios(config, {
         onUploadProgress: (ProgressEvent) => {
           let progress =
             Math.round((ProgressEvent.loaded / ProgressEvent.total) * 100) +
@@ -35,12 +98,13 @@ const Profile = () => {
           setProgess(progress);
         },
       })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => console.log(err)));
+    window.location.reload();
   };
-
+  console.log(pre);
   return (
     <>
       <NavBar />
@@ -80,48 +144,80 @@ const Profile = () => {
           }}
         >
           <TextField
-            label={"Full Name"}
+            value={name}
+            label={pre && pre.username ? null : "Name"}
             sx={{ width: "50vw", height: "50px", marginBottom: "20px" }}
+            disabled
           />
           <TextField
-            label="Age"
+            label={pre && pre.age ? null : "Age"}
             type="number"
             sx={{
               width: "50vw",
               height: "50px",
               marginBottom: "20px",
             }}
+            value={pre && pre.age ? pre.age : age}
+            onChange={(e) => setAge(e.target.value)}
             className={styles.greyback}
+            disabled={pre && pre.age ? true : false}
           />
           <TextField
-            label="Email"
             type="email"
+            label={pre && pre.email ? null : "Email"}
             sx={{ width: "50vw", height: "50px", marginBottom: "30px" }}
+            value={email}
+            disabled
           />
 
           <FormControl sx={{ marginBottom: "20px", width: "50vw" }}>
-            <FormLabel
-              sx={{
-                color: "black",
-                fontWeight: "500",
-                labelPlacement: "top",
+            <Stack direction={"row"} spacing={2}>
+              <FormLabel
+                sx={{
+                  color: "black",
+                  fontWeight: "500",
+                  labelPlacement: "top",
+                }}
+                className="robo"
+              >
+                Gender
+              </FormLabel>
+              <FormLabel
+                sx={{
+                  color: "black",
+                  fontWeight: "500",
+                  labelPlacement: "top",
+                }}
+                className="robo"
+              >
+                {pre && pre.gender}
+              </FormLabel>
+            </Stack>
+            <RadioGroup
+              row
+              onChange={(e) => {
+                setGender(e.target.value);
               }}
-              className="robo"
             >
-              Gender
-            </FormLabel>
-            <RadioGroup row>
-              <FormControlLabel value="male" control={<Radio />} label="Male" />
-              <FormControlLabel
-                value="female"
-                control={<Radio />}
-                label="Female"
-              />
-              <FormControlLabel
-                value="other"
-                control={<Radio />}
-                label="Other"
-              />
+              {pre && pre.gender ? null : (
+                <Fragment>
+                  <FormControlLabel
+                    value="Male"
+                    control={<Radio />}
+                    label="Male"
+                  />
+                  <FormControlLabel
+                    value="Female"
+                    control={<Radio />}
+                    label="Female"
+                  />
+                  <FormControlLabel
+                    value="other"
+                    control={<Radio />}
+                    label="Other"
+                  />
+                </Fragment>
+              )}
             </RadioGroup>
           </FormControl>
 
@@ -175,6 +271,9 @@ const Profile = () => {
             <TextField
               placeholder="type here ... "
               sx={{ width: "45vw", height: "250px" }}
+              onChange={(e) => {
+                setExp(e.target.value);
+              }}
             />
             <CancelRoundedIcon
               color="error"
@@ -185,7 +284,7 @@ const Profile = () => {
               sx={{ marginLeft: "2px" }}
             />
           </Box>
-          <Button type="submit" variant="contained" onSubmit={uploadFile}>
+          <Button type="submit" variant="contained" onClick={uploadFile}>
             SAVE
           </Button>
         </form>

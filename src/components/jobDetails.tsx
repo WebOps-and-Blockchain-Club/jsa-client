@@ -56,7 +56,8 @@ return (
                 {jobData.job_location}
               </Typography>
               <Typography style={{ fontFamily: "Calibri", fontWeight: "550" }}>
-                {jobData.job_salary}
+              {jobData.job_salary!="NA" && jobData.job_salary!="Not Disclosed" ? jobData.job_salary : null }
+
               </Typography>
               {Parser(jobData.job_description_html)}
             </CardContent>
