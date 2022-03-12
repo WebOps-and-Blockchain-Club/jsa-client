@@ -50,7 +50,16 @@ const JobListing = ({ results }) => {
         >
           {/*container for left side cards*/}
           {results.length === 0 ? (
-            <p>no jobs found</p>
+            <Typography
+            variant="h2"
+            style={{
+              fontFamily: "Noto Sans",
+              fontSize: "16px",
+              marginTop:"20vh",
+            }}
+          >
+            No jobs found! Search for another job
+          </Typography>
           ) : (
             results.map((job: any, index: any) => {
               if (job) {
@@ -150,7 +159,7 @@ const JobListing = ({ results }) => {
           )}
         </Box>
         {/* container for the description */}
-        {!isPhone && <JobDetails jobData={jobData} />}
+        {!isPhone && results.length !== 0 && <JobDetails jobData={jobData} />}
       </Box>
     </>
   );

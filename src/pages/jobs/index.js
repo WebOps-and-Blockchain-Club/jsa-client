@@ -42,7 +42,7 @@ export default function Job() {
         setData(jsonData);
         setIsLoading(false);
       } catch (error) {
-        console.log(hasError);
+        console.log(error);
       }
     };
     jobFetch();
