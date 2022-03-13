@@ -28,10 +28,13 @@ export default function Job() {
 
       try {
         console.log("fetching from backend");
-        axios(config).then(async (response) => {
-          console.log(response.data);
+        var config = {
+          method: "get",
+          url: `${process.env.BACKEND_URL}/jobs?location=${jobLocation}&title=${jobName}`,
+        };
+
+        await axios(config).then(async (response) => {
           if (response.data) {
-            console.log(response.data);
             setData(response.data);
             setIsLoading(false);
           }
@@ -39,6 +42,7 @@ export default function Job() {
       } catch (error) {
         console.log(error);
       }
+
       // try {
       //   console.log("fetching from backend");
       //   const response = await fetch(
