@@ -13,25 +13,19 @@ import { Box } from "@mui/system";
 import axios from "axios";
 
 export default function Job() {
-  const useUrl = useRouter();
-  const { jobName, jobLocation } = useUrl.query;
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
-  const [hasError, setHasError] = useState(false);
   //job fetch function
   console.log(isLoading);
   //jobFetch was previously here
-  const job_title = "title";
   //fetch whenever query is changed
   useEffect(() => {
+    if (!router.isReady) return;
+    const { jobName, jobLocation } = router.query;
     const jobFetch = async () => {
       setIsLoading(true);
 
-      setHasError(false);
-      var config = {
-        method: "get",
-        url: `${process.env.BACKEND_URL}/jobs?location=${jobLocation}&title=${jobName}`,
-      };
       try {
         console.log("fetching from backend");
         axios(config).then(async (response) => {
@@ -43,8 +37,7 @@ export default function Job() {
           }
         });
       } catch (error) {
-        setHasError(true);
-        console.log(hasError);
+        console.log(error);
       }
       // try {
       //   console.log("fetching from backend");
@@ -69,7 +62,7 @@ export default function Job() {
     };
 
     jobFetch();
-  }, [hasError]);
+  }, [router.isReady]);
 
   return (
     <>

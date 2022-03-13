@@ -3,7 +3,14 @@ import NavBar from "../components/navBar";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import styles from "../styles/Profile.module.css";
 //imports from mui
-import { Radio, RadioGroup, FormControlLabel, Box, Input, Stack } from "@mui/material";
+import {
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  Box,
+  Input,
+  Stack,
+} from "@mui/material";
 import { FormLabel, TextField, FormControl } from "@mui/material";
 import { Typography, Button, InputLabel, OutlinedInput } from "@mui/material";
 import ModeEditRoundedIcon from "@mui/icons-material/ModeEditRounded";
@@ -50,35 +57,35 @@ const Profile = () => {
   };
   const uploadFile = async (e) => {
     e.preventDefault();
-    
-      var data = JSON.stringify({
-        gender,
-        experience,
-        age,
+
+    var data = JSON.stringify({
+      gender,
+      experience,
+      age,
+    });
+
+    var config = {
+      method: "post",
+      url: `${process.env.BACKEND_URL}/addprofile`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    await axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
       });
-  
-      var config = {
-        method: "post",
-        url: "http://localhost:8000/addprofile",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-  
-      await axios(config)
-        .then(function (response) {
-          console.log(JSON.stringify(response.data));
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
 
     const formData = new FormData();
     formData.append("file", file); // appending file
     var config = {
       method: "post",
-      url: "http://localhost:8000/upload",
+      url: `${process.env.BACKEND_URL}/upload`,
       data: formData,
       ...formData.getHeaders,
     };
@@ -164,28 +171,28 @@ const Profile = () => {
           />
 
           <FormControl sx={{ marginBottom: "20px", width: "50vw" }}>
-             <Stack direction={'row'} spacing={2}>
-             <FormLabel
-              sx={{
-                color: "black",
-                fontWeight: "500",
-                labelPlacement: "top",
-              }}
-              className="robo"
-            >
-              Gender
-            </FormLabel>
-            <FormLabel
-              sx={{
-                color: "black",
-                fontWeight: "500",
-                labelPlacement: "top",
-              }}
-              className="robo"
-            >
-              {pre && pre.gender}
-            </FormLabel>
-             </Stack>
+            <Stack direction={"row"} spacing={2}>
+              <FormLabel
+                sx={{
+                  color: "black",
+                  fontWeight: "500",
+                  labelPlacement: "top",
+                }}
+                className="robo"
+              >
+                Gender
+              </FormLabel>
+              <FormLabel
+                sx={{
+                  color: "black",
+                  fontWeight: "500",
+                  labelPlacement: "top",
+                }}
+                className="robo"
+              >
+                {pre && pre.gender}
+              </FormLabel>
+            </Stack>
             <RadioGroup
               row
               onChange={(e) => {
