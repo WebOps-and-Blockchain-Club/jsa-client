@@ -9,14 +9,15 @@ const SearchBar = () => {
   const router = useRouter();
   const [job_name, set_job_name] = useState<string>("-1");
   const [job_location, set_job_location] = useState<string>("-1");
-  function submitEvent() {
+  function submitEvent(e) {
+    e.preventDefault();
     console.log("call started");
     if (job_location === "-1" || job_name == "-1") 
     {window.alert("Enter job name and location");
       router.push("/");
   }
     else {
-      //TODO API CALL ref eof
+      router.push(`/jobs?jobName=${job_name}&jobLocation=${job_location}`);
     }
   }
   return (

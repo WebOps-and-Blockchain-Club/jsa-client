@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { Oval } from "react-loader-spinner";
 //imports from mui
 import { Box } from "@mui/system";
+import axios from "axios";
 
 export default function Job() {
   const router = useRouter();
@@ -27,20 +28,18 @@ export default function Job() {
 
       try {
         console.log("fetching from backend");
-        const response = await fetch(
-          `${process.env.BACKEND_URL}/jobs?location=${jobLocation}&title=${jobName}`,
-          {
-            method: "GET",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
+        var config = {
+          method: "get",
+          url: `${process.env.BACKEND_URL}/jobs?location=${jobLocation}&title=${jobName}`,
+          credentials: "include",
+	};
+
+        await axios(config).then(async (response) => {
+          if (response.data) {
+            setData(response.data);
+            setIsLoading(false);
           }
-        );
-        console.log(response);
-        const jsonData = await response.json();
-        setData(jsonData);
-        setIsLoading(false);
+        });
       } catch (error) {
         console.log(error);
       }
